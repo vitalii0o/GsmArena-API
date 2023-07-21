@@ -53,7 +53,7 @@ class GsmArenaApi
             $result['data'] = [];
         } else {
             $html = str_get_html($ngecurl);
-            $div = $html->find('div[class=st-text] table', 0);
+            $div = $html->find('div[class=st-text] table tbody', 0);
 
             if ($div->find('tr', 0)) {
                 $result['status'] = 'success';
@@ -230,10 +230,10 @@ class GsmArenaApi
                         $tr->find('td', 0) == '&nbsp;' ? $ttl = 'empty' : $ttl = $tr->find('td', 0);
                         $search = ['.', ',', '&', '-', ' '];
                         $replace = ['', '', '', '_', '_'];
-                        $ttl = strtolower(str_replace($search, $replace, $ttl));
+                        $ttl = $ttl ? strtolower(str_replace($search, $replace, $ttl)) : null;
                         $nfo = $tr->find('td', 1);
                         $result['data'][strtolower($th->innertext)][] = [
-                            strip_tags($ttl) => strip_tags($nfo)
+                            $ttl ? strip_tags($ttl) : null => $nfo ? strip_tags($nfo) : null
                         ];
                     }
                 }
